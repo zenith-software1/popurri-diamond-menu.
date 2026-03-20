@@ -3,271 +3,332 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Popurrí | Diamond Experience</title>
+    <title>Zenith Code | Luxury Interface</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@100;300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@200;400;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --gold-gradient: linear-gradient(135deg, #c5a059 0%, #f7e0a8 50%, #ad8a43 100%);
-            --gold-solid: #c5a059;
-            --black-pure: #050505;
-            --glass-bg: rgba(20, 20, 20, 0.6);
-            --glass-border: rgba(197, 160, 89, 0.3);
-            --text-white: #f8f8f8;
-            --text-muted: #a1a1a1;
-            --ease: cubic-bezier(0.23, 1, 0.32, 1);
+            --gold: #c5a059;
+            --gold-light: #f7e0a8;
+            --black: #050505;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(197, 160, 89, 0.2);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            background-color: var(--black-pure);
-            color: var(--text-white);
+            background-color: var(--black);
+            color: white;
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
-            line-height: 1.6;
         }
 
-        /* --- FONDO ANIMADO DE PARTÍCULAS --- */
-        #canvas-bg {
+        /* --- BACKGROUND --- */
+        #canvas-particles {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; opacity: 0.4;
+            z-index: -1; opacity: 0.3;
         }
 
-        /* --- HERO SECTION --- */
-        .hero {
-            height: 100vh;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-align: center; position: relative;
-            background: radial-gradient(circle at center, rgba(197, 160, 89, 0.1) 0%, transparent 70%);
+        /* --- HEADER & BRANDING --- */
+        header {
+            padding: 40px 20px;
+            text-align: center;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
         }
 
-        .hero-label {
-            font-size: 0.7rem; letter-spacing: 0.5rem; text-transform: uppercase;
-            color: var(--gold-solid); margin-bottom: 20px;
-            animation: fadeInDown 1.5s var(--ease);
+        .brand-tag {
+            color: var(--gold);
+            font-size: 10px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: block;
         }
 
-        .hero h1 {
+        h1 {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(3.5rem, 12vw, 8rem);
-            font-weight: 400; font-style: italic;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            letter-spacing: -2px; margin-bottom: 10px;
-            animation: fadeInUp 1.5s var(--ease);
+            font-size: 3.5rem;
+            font-weight: 400;
+            font-style: italic;
+            background: linear-gradient(to right, #fff, var(--gold), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* --- GRID DE MENÚ --- */
-        .container { max-width: 1100px; margin: 0 auto; padding: 100px 20px; }
-        
-        .section-title {
-            font-family: 'Playfair Display', serif; font-size: 2.5rem;
-            margin-bottom: 50px; text-align: center; font-weight: 400;
-            position: relative; padding-bottom: 15px;
-        }
-        .section-title::after {
-            content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-            width: 50px; height: 1px; background: var(--gold-solid);
+        /* --- CATEGORÍAS (Interactividad Real) --- */
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+            overflow-x: auto;
+            white-space: nowrap;
         }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px; }
-
-        /* --- TARJETAS DE CRISTAL --- */
-        .card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        .cat-btn {
+            background: var(--glass);
             border: 1px solid var(--glass-border);
-            border-radius: 4px; overflow: hidden;
-            transition: var(--ease) 0.5s;
-            position: relative;
-        }
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: var(--gold-solid);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            color: #888;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: var(--transition);
         }
 
-        .card-img-wrap { width: 100%; height: 280px; overflow: hidden; background: #111; position: relative; }
-        
-        /* Placeholder para imágenes que no cargan */
-        .card-img-wrap::before {
-            content: 'Cargando Alta Resolución...'; position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%); font-size: 0.7rem; color: #333; letter-spacing: 2px;
+        .cat-btn.active {
+            border-color: var(--gold);
+            color: var(--gold);
+            background: rgba(197, 160, 89, 0.1);
         }
+
+        /* --- PRODUCT GRID --- */
+        .container { padding: 20px; max-width: 1200px; margin: 0 auto; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .card.visible { opacity: 1; transform: translateY(0); }
 
         .card-img {
-            width: 100%; height: 100%; object-fit: cover;
-            transition: transform 1.2s var(--ease); opacity: 0; /* Empieza invisible hasta cargar */
+            width: 100%; height: 220px;
+            object-fit: cover;
+            filter: grayscale(0.3);
+            transition: var(--transition);
         }
-        .card:hover .card-img { transform: scale(1.08); }
 
-        .card-content { padding: 30px; }
-        .card-category { font-size: 0.6rem; text-transform: uppercase; color: var(--gold-solid); letter-spacing: 2px; margin-bottom: 10px; display: block; }
-        .card-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-bottom: 12px; font-weight: 400; }
-        .card-desc { font-size: 0.85rem; color: var(--text-muted); font-weight: 300; margin-bottom: 25px; min-height: 40px; }
-        
-        .card-footer { display: flex; justify-content: space-between; align-items: center; }
-        .price { font-size: 1.3rem; font-weight: 300; font-family: 'Playfair Display', serif; }
+        .card:active { transform: scale(0.98); }
 
-        .btn-add {
-            background: transparent; border: 1px solid var(--gold-solid); color: var(--gold-solid);
-            padding: 10px 25px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;
-            cursor: pointer; transition: 0.4s;
+        .card-body { padding: 25px; }
+
+        .card-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 8px; }
+
+        .card-desc { color: #888; font-size: 13px; font-weight: 200; margin-bottom: 20px; height: 40px; }
+
+        .card-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .btn-add:hover { background: var(--gold-solid); color: black; font-weight: 600; }
 
-        /* --- CARRITO FLOTANTE (REFINADO) --- */
-        #cart-bar {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150px);
-            width: 90%; max-width: 500px;
-            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(25px);
-            border: 1px solid rgba(197, 160, 89, 0.5); padding: 15px 30px;
+        .price { font-size: 1.2rem; color: var(--gold-light); }
+
+        .add-btn {
+            background: var(--gold);
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        /* --- SECCIÓN "CÓMO FUNCIONA" (Estructura de Producto) --- */
+        .how-it-works {
+            margin-top: 80px;
+            padding: 40px 20px;
+            background: rgba(197, 160, 89, 0.03);
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .how-title { font-family: 'Playfair Display', serif; color: var(--gold); margin-bottom: 30px; }
+
+        .step-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .step { font-size: 13px; color: #aaa; }
+        .step i { display: block; font-size: 2rem; color: var(--gold); margin-bottom: 15px; }
+
+        /* --- CARRITO PREMIUM --- */
+        #cart {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150%);
+            width: 90%; max-width: 450px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--gold);
+            padding: 20px;
+            border-radius: 15px;
             display: flex; justify-content: space-between; align-items: center;
-            z-index: 1000; transition: transform 0.6s var(--ease);
-            border-radius: 2px;
-        }
-        #cart-bar.active { transform: translateX(-50%) translateY(0); }
-        .cart-info h4 { font-family: 'Playfair Display', serif; font-size: 1.2rem; }
-        .cart-info p { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--gold-solid); }
-
-        .btn-order {
-            background: var(--gold-gradient); color: black; border: none;
-            padding: 12px 30px; font-size: 0.75rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 2px; cursor: pointer;
+            z-index: 1000; transition: var(--transition);
         }
 
-        /* --- ANIMACIONES --- */
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        #cart.show { transform: translateX(-50%) translateY(0); }
 
-        .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s var(--ease); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
+        /* --- FOOTER (Identity) --- */
+        footer {
+            padding: 60px 20px;
+            text-align: center;
+            border-top: 1px solid #111;
+            margin-top: 50px;
+        }
+
+        .zenith-logo {
+            font-size: 12px;
+            letter-spacing: 4px;
+            color: #444;
+            text-transform: uppercase;
+        }
 
     </style>
 </head>
 <body>
 
-    <canvas id="canvas-bg"></canvas>
+    <canvas id="canvas-particles"></canvas>
 
-    <div class="hero">
-        <span class="hero-label">Exquisite Taste &bull; León Gto</span>
+    <header>
+        <span class="brand-tag">Exquisite Digital Menu</span>
         <h1>Popurrí</h1>
-        <p style="font-weight: 100; letter-spacing: 8px; font-size: 0.8rem; color: #666;">DIAMOND EDITION</p>
+    </header>
+
+    <div class="categories">
+        <button class="cat-btn active" onclick="filter('all')">Todo</button>
+        <button class="cat-btn" onclick="filter('brunch')">Brunch</button>
+        <button class="cat-btn" onclick="filter('cafe')">Café</button>
+        <button class="cat-btn" onclick="filter('postres')">Postres</button>
     </div>
 
     <div class="container">
-        <h2 class="section-title">Signature Brunch</h2>
         <div class="grid" id="menu-grid">
             </div>
+
+        <section class="how-it-works">
+            <h2 class="how-title">Experiencia Zenith</h2>
+            <div class="step-grid">
+                <div class="step">
+                    <strong>1. Selecciona</strong>
+                    <p>Explora nuestro menú visual de alta velocidad.</p>
+                </div>
+                <div class="step">
+                    <strong>2. Ordena</strong>
+                    <p>Tus favoritos se añaden a un carrito inteligente.</p>
+                </div>
+                <div class="step">
+                    <strong>3. Disfruta</strong>
+                    <p>La orden llega lista para procesar vía WhatsApp.</p>
+                </div>
+            </div>
+        </section>
     </div>
 
-    <div id="cart-bar">
-        <div class="cart-info">
-            <h4 id="cart-total">$0.00</h4>
-            <p><span id="cart-count">0</span> Platillos Seleccionados</p>
+    <div id="cart">
+        <div>
+            <p id="cart-count" style="font-size: 10px; color: var(--gold);">0 PLATILLOS</p>
+            <h3 id="cart-total">$0.00</h3>
         </div>
-        <button class="btn-order" onclick="sendOrder()">Finalizar Orden</button>
+        <button class="add-btn" onclick="sendWhatsApp()" style="padding: 15px 30px;">Enviar Pedido</button>
     </div>
+
+    <footer>
+        <p class="zenith-logo">Powered by Zenith Code</p>
+        <p style="font-size: 10px; color: #222; margin-top: 10px;">León, Guanajuato 2026</p>
+    </footer>
 
     <script>
-        // CONFIGURACIÓN DEL MENÚ
-        const menuItems = [
-            { id: 1, cat: 'BRUNCH', name: 'Chilaquiles Elite', price: 158, desc: 'Salsa verde artesanal, crema de rancho y queso cotija añejo.', img: 'https://images.unsplash.com/photo-1610410712918-0f04c7d0d6c9?q=80&w=800' },
-            { id: 2, cat: 'BRUNCH', name: 'Avocado Gold', price: 135, desc: 'Pan de masa madre, aguacate premium y huevo pochado.', img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?q=80&w=800' },
-            { id: 3, cat: 'CAFE', name: 'Velvet Latte', price: 65, desc: 'Espresso de especialidad con leche texturizada.', img: 'https://images.unsplash.com/photo-1541167760496-162955ed8a9f?q=80&w=800' }
+        const WHATSAPP_NUMBER = "4791589872";
+        const products = [
+            { id: 1, cat: 'brunch', name: 'Chilaquiles Elite', price: 158, img: 'https://images.unsplash.com/photo-1641322223946-466d79e56701?q=80&w=800' },
+            { id: 2, cat: 'brunch', name: 'Avocado Gold', price: 135, img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?q=80&w=800' },
+            { id: 3, cat: 'cafe', name: 'Velvet Latte', price: 65, img: 'https://images.unsplash.com/photo-1541167760496-162955ed8a9f?q=80&w=800' },
+            { id: 4, cat: 'postres', name: 'Cheesecake Diamond', price: 110, img: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?q=80&w=800' }
         ];
 
         let cart = [];
-        const PHONE = "4791589872";
 
-        // RENDERIZAR MENÚ
-        function renderMenu() {
+        function render(category = 'all') {
             const grid = document.getElementById('menu-grid');
-            grid.innerHTML = menuItems.map(item => `
-                <div class="card reveal">
-                    <div class="card-img-wrap">
-                        <img src="${item.img}" class="card-img" onload="this.style.opacity=1">
-                    </div>
-                    <div class="card-content">
-                        <span class="card-category">${item.cat}</span>
-                        <h3 class="card-title">${item.name}</h3>
-                        <p class="card-desc">${item.desc}</p>
-                        <div class="card-footer">
-                            <span class="price">$${item.price.toFixed(2)}</span>
-                            <button class="btn-add" onclick="addToCart(${item.id})">Añadir</button>
+            grid.innerHTML = '';
+            
+            products.forEach(p => {
+                if(category === 'all' || p.cat === category) {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <img src="${p.img}" class="card-img" alt="${p.name}">
+                        <div class="card-body">
+                            <h3 class="card-title">${p.name}</h3>
+                            <p class="card-desc">Ingredientes premium seleccionados para el paladar más exigente.</p>
+                            <div class="card-price">
+                                <span class="price">$${p.price}.00</span>
+                                <button class="add-btn" onclick="addToCart(${p.id})">Añadir</button>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            `).join('');
+                    `;
+                    grid.appendChild(card);
+                    setTimeout(() => card.classList.add('visible'), 100);
+                }
+            });
         }
 
         function addToCart(id) {
-            const item = menuItems.find(i => i.id === id);
+            const item = products.find(p => p.id === id);
             cart.push(item);
-            updateCart();
-        }
-
-        function updateCart() {
-            const bar = document.getElementById('cart-bar');
-            const total = cart.reduce((sum, item) => sum + item.price, 0);
             
-            if(cart.length > 0) bar.classList.add('active');
-            document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
-            document.getElementById('cart-count').innerText = cart.length;
-        }
-
-        function sendOrder() {
-            let msg = `*NUEVA ORDEN - POPURRÍ*\n\n`;
-            cart.forEach(item => msg += `• ${item.name} ($${item.price})\n`);
-            const total = cart.reduce((sum, item) => sum + item.price, 0);
-            msg += `\n*TOTAL: $${total.toFixed(2)} MXN*`;
+            const cartEl = document.getElementById('cart');
+            cartEl.classList.add('show');
             
-            window.open(`https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`);
+            const total = cart.reduce((s, i) => s + i.price, 0);
+            document.getElementById('cart-total').innerText = `$${total}.00`;
+            document.getElementById('cart-count').innerText = `${cart.length} PLATILLOS`;
         }
 
-        // MOTOR DE PARTÍCULAS (POLVO DE ORO)
-        const canvas = document.getElementById('canvas-bg');
+        function filter(cat) {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            render(cat);
+        }
+
+        function sendWhatsApp() {
+            let msg = "*ORDEN PREMIUM - ZENITH CODE*\n\n";
+            cart.forEach(i => msg += `• ${i.name} ($${i.price})\n`);
+            msg += `\n*TOTAL: $${cart.reduce((s,i) => s+i.price, 0)} MXN*`;
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`);
+        }
+
+        // --- PARTÍCULAS ---
+        const canvas = document.getElementById('canvas-particles');
         const ctx = canvas.getContext('2d');
-        let particles = [];
-
-        function initParticles() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            for(let i=0; i<60; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 2,
-                    speed: Math.random() * 0.5 + 0.1
-                });
-            }
+        let pts = [];
+        function init() {
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            for(let i=0; i<50; i++) pts.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*2});
         }
-
-        function animate() {
-            ctx.clearRect(0,0, canvas.width, canvas.height);
+        function draw() {
+            ctx.clearRect(0,0,canvas.width, canvas.height);
             ctx.fillStyle = '#c5a059';
-            particles.forEach(p => {
-                p.y -= p.speed;
-                if(p.y < 0) p.y = canvas.height;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
-                ctx.fill();
+            pts.forEach(p => {
+                p.y -= 0.5; if(p.y < 0) p.y = canvas.height;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
             });
-            requestAnimationFrame(animate);
+            requestAnimationFrame(draw);
         }
 
-        // REVELADO AL HACER SCROLL
-        window.addEventListener('scroll', () => {
-            document.querySelectorAll('.reveal').forEach(el => {
-                if(el.getBoundingClientRect().top < window.innerHeight * 0.8) el.classList.add('active');
-            });
-        });
-
-        renderMenu();
-        initParticles();
-        animate();
+        window.onload = () => { init(); draw(); render(); };
     </script>
 </body>
 </html>
