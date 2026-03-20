@@ -3,318 +3,328 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Zenith Code | Luxury Dining Experience</title>
+    <title>Zenith Code | Luxury Digital Architecture</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@100;200;300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@100;200;300;400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        /* --- VARIABLES DE DISEÑO ZENITH --- */
+        /* ZENITH CODE DESIGN SYSTEM 
+           Propiedad Intelectual de Uziel Noriega
+        */
         :root {
             --gold: #c5a059;
-            --gold-dark: #8e6d2d;
-            --gold-light: #f7e0a8;
-            --black-deep: #050505;
-            --black-card: #0c0c0c;
+            --gold-gradient: linear-gradient(135deg, #ad8a43 0%, #f7e0a8 50%, #ad8a43 100%);
+            --black-ultra: #030303;
+            --black-card: #0a0a0a;
             --glass: rgba(255, 255, 255, 0.02);
-            --glass-border: rgba(197, 160, 89, 0.15);
-            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            --white: #ffffff;
-            --gray: #888888;
+            --glass-border: rgba(197, 160, 89, 0.2);
+            --text-main: #ffffff;
+            --text-dim: #777777;
+            --transition-smooth: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* --- RESET & BASE --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+
         body {
-            background-color: var(--black-deep);
-            color: var(--white);
+            background-color: var(--black-ultra);
+            color: var(--text-main);
             font-family: 'Inter', sans-serif;
-            overflow: hidden; /* Se habilita tras el loader */
-            scrollbar-width: none;
+            overflow: hidden; /* Controlado por el Loader */
+            line-height: 1.6;
         }
-        body::-webkit-scrollbar { display: none; }
 
-        /* --- SPLASH SCREEN (ZENITH BLINK) --- */
-        #loader {
+        /* --- ZENITH SPLASH SCREEN --- */
+        #zenith-loader {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--black-deep); z-index: 10000;
+            background: var(--black-ultra); z-index: 99999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
-        .loader-brand { font-size: 10px; letter-spacing: 8px; color: var(--gold); text-transform: uppercase; margin-bottom: 15px; }
-        .blink-text {
-            font-family: 'Playfair Display', serif; font-size: 2.8rem; font-style: italic;
-            animation: zenith-blink 1.8s infinite;
+
+        .loader-sub { font-size: 10px; letter-spacing: 10px; color: var(--gold); text-transform: uppercase; margin-bottom: 20px; opacity: 0.5; }
+        
+        .zenith-blink {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem; font-style: italic; color: white;
+            animation: zenith-glitch 2s infinite;
+            text-align: center;
         }
-        @keyframes zenith-blink {
-            0%, 15%, 100% { opacity: 1; text-shadow: 0 0 30px rgba(197, 160, 89, 0.4); }
-            5%, 10% { opacity: 0.1; text-shadow: none; }
+
+        @keyframes zenith-glitch {
+            0%, 15%, 100% { opacity: 1; text-shadow: 0 0 20px rgba(197, 160, 89, 0.6); }
+            5% { opacity: 0.1; transform: skewX(2deg); }
+            7% { opacity: 1; transform: skewX(0); }
+            9% { opacity: 0.4; }
         }
 
-        /* --- BACKGROUND CANVAS --- */
-        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.35; }
+        /* --- BACKGROUND ENGINE --- */
+        #canvas-particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.3; }
 
-        /* --- LAYOUT WRAPPER --- */
-        #app-content { opacity: 0; transition: opacity 1.2s ease; visibility: hidden; }
+        /* --- MAIN INTERFACE --- */
+        #main-app { opacity: 0; visibility: hidden; transition: opacity 2s ease; }
 
-        /* --- HEADER & NAVIGATION --- */
-        header { padding: 100px 20px 60px; text-align: center; }
-        .hero-tag { color: var(--gold); font-size: 12px; letter-spacing: 6px; text-transform: uppercase; margin-bottom: 20px; display: block; }
-        h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 10vw, 5rem); font-weight: 400; font-style: italic; margin-bottom: 10px; }
-        .hero-desc { color: var(--gray); font-weight: 200; letter-spacing: 1px; font-size: 14px; }
+        header { padding: 120px 20px 60px; text-align: center; position: relative; }
+        .badge { color: var(--gold); font-size: 12px; letter-spacing: 8px; text-transform: uppercase; margin-bottom: 15px; display: block; }
+        h1 { font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 12vw, 6rem); font-weight: 400; font-style: italic; margin-bottom: 15px; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* --- CATEGORY FILTERS --- */
-        .filter-container {
-            display: flex; justify-content: center; gap: 10px; padding: 20px;
-            position: sticky; top: 0; z-index: 100; background: rgba(5,5,5,0.8); backdrop-filter: blur(10px);
-            margin-bottom: 40px; overflow-x: auto;
+        /* --- NAV FILTERS --- */
+        .nav-scroller {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(3,3,3,0.9); backdrop-filter: blur(15px);
+            padding: 20px 0; border-bottom: 1px solid var(--glass-border);
         }
+        .filter-wrapper { display: flex; justify-content: center; gap: 15px; overflow-x: auto; padding: 0 20px; }
         .filter-btn {
-            background: transparent; border: 1px solid var(--glass-border); color: var(--gray);
-            padding: 10px 24px; border-radius: 50px; font-size: 11px; text-transform: uppercase;
-            letter-spacing: 1px; cursor: pointer; transition: var(--transition);
+            background: var(--glass); border: 1px solid var(--glass-border); color: var(--text-dim);
+            padding: 10px 25px; border-radius: 2px; font-size: 11px; text-transform: uppercase;
+            letter-spacing: 2px; cursor: pointer; transition: var(--transition-smooth); white-space: nowrap;
         }
-        .filter-btn.active { background: var(--gold); color: black; border-color: var(--gold); font-weight: 600; }
+        .filter-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(197, 160, 89, 0.1); }
 
         /* --- MENU GRID --- */
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 100px; }
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+        .menu-container { max-width: 1400px; margin: 60px auto; padding: 0 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px; }
 
-        /* --- PRODUCT CARDS --- */
-        .card {
+        .item-card {
             background: var(--black-card); border: 1px solid var(--glass-border);
-            border-radius: 4px; overflow: hidden; position: relative; transition: var(--transition);
+            border-radius: 0px; overflow: hidden; position: relative; transition: var(--transition-smooth);
         }
-        .card:hover { border-color: var(--gold); transform: translateY(-8px); }
-        .img-box { width: 100%; height: 260px; overflow: hidden; background: #111; position: relative; }
-        .card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.5s ease; opacity: 0; }
-        .card:hover .card-img { transform: scale(1.1); }
+        .item-card:hover { transform: translateY(-15px); border-color: var(--gold); }
+
+        .item-img-container { width: 100%; height: 350px; overflow: hidden; position: relative; background: #111; }
+        .item-img { width: 100%; height: 100%; object-fit: cover; transition: transform 2s ease; opacity: 0; }
+        .item-card:hover .item-img { transform: scale(1.1); }
+
+        .item-body { padding: 30px; }
+        .item-cat { font-size: 10px; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; display: block; }
+        .item-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 15px; font-weight: 400; }
         
-        .card-info { padding: 25px; }
-        .card-cat { font-size: 9px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; display: block; }
-        .card-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-bottom: 12px; font-weight: 400; }
-        .card-price { font-size: 1.3rem; font-family: 'Playfair Display', serif; color: var(--gold-light); }
-        
-        .btn-action {
-            width: 100%; margin-top: 20px; padding: 14px; background: transparent;
+        .price-tag { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--gold-light); }
+        .btn-add {
+            width: 100%; margin-top: 25px; padding: 15px; background: transparent;
             border: 1px solid var(--gold); color: var(--gold); font-size: 11px;
-            letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: 0.3s;
+            text-transform: uppercase; letter-spacing: 3px; cursor: pointer; transition: 0.4s;
         }
-        .btn-action:hover { background: var(--gold); color: black; font-weight: 700; }
+        .btn-add:hover { background: var(--gold); color: black; font-weight: 800; }
 
-        /* --- HOW IT WORKS SECTION --- */
-        .info-section {
-            background: rgba(197, 160, 89, 0.03); padding: 80px 20px;
-            border-radius: 20px; text-align: center; margin: 60px 0;
+        /* --- INFO SECTION --- */
+        .zenith-info { padding: 100px 20px; text-align: center; background: rgba(197, 160, 89, 0.02); margin: 100px 0; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 50px; max-width: 1200px; margin: 50px auto; }
+        .info-card h3 { font-family: 'Playfair Display', serif; color: var(--gold); margin-bottom: 20px; font-size: 1.5rem; }
+        .info-card p { font-weight: 200; color: var(--text-dim); font-size: 14px; line-height: 2; }
+
+        /* --- SHOPPING CART --- */
+        #cart-interface {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(200%);
+            width: 90%; max-width: 550px; background: rgba(5,5,5,0.95); backdrop-filter: blur(25px);
+            border: 1px solid var(--gold); padding: 25px 40px; border-radius: 4px;
+            display: flex; justify-content: space-between; align-items: center; z-index: 9999;
+            transition: var(--transition-smooth);
         }
-        .info-title { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 40px; color: var(--gold); }
-        .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
-        .step h3 { font-size: 12px; letter-spacing: 3px; margin-bottom: 15px; color: var(--gold-light); }
-        .step p { font-size: 14px; color: var(--gray); line-height: 1.8; font-weight: 200; }
+        #cart-interface.active { transform: translateX(-50%) translateY(0); }
+        .cart-data h4 { font-family: 'Playfair Display', serif; font-size: 1.6rem; }
+        .cart-data span { font-size: 10px; letter-spacing: 3px; color: var(--gold); }
 
-        /* --- SHOPPING CART BAR --- */
-        #cart-bar {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150%);
-            width: 90%; max-width: 500px; background: rgba(10,10,10,0.9); backdrop-filter: blur(20px);
-            border: 1px solid var(--gold); border-radius: 8px; padding: 20px 30px;
-            display: flex; justify-content: space-between; align-items: center; z-index: 1000;
-            transition: var(--transition);
-        }
-        #cart-bar.active { transform: translateX(-50%) translateY(0); }
-        .cart-details h4 { font-family: 'Playfair Display', serif; font-size: 1.4rem; }
-        .cart-details span { font-size: 10px; letter-spacing: 2px; color: var(--gold); }
-
-        /* --- FOOTER --- */
-        footer { padding: 80px 20px; text-align: center; border-top: 1px solid #111; }
-        .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-style: italic; color: var(--gold); margin-bottom: 20px; }
-        .footer-links { margin-bottom: 30px; }
-        .footer-links a { color: var(--gray); text-decoration: none; margin: 0 15px; font-size: 12px; transition: 0.3s; }
-        .footer-links a:hover { color: var(--gold); }
-        .zenith-badge { font-size: 10px; letter-spacing: 5px; color: #333; text-transform: uppercase; margin-top: 40px; }
+        /* --- FOOTER IDENTITY --- */
+        footer { padding: 100px 20px; text-align: center; border-top: 1px solid #111; }
+        .f-logo { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-style: italic; color: var(--gold); margin-bottom: 30px; }
+        .f-credits { font-size: 11px; letter-spacing: 6px; color: #333; text-transform: uppercase; margin-top: 50px; }
 
     </style>
 </head>
 <body>
 
-    <div id="loader">
-        <span class="loader-brand">Powered by</span>
-        <div class="blink-text">Zenith Code</div>
+    <div id="zenith-loader">
+        <span class="loader-sub">Next-Gen Interface</span>
+        <div class="zenith-blink">Zenith Code</div>
     </div>
 
-    <div id="app-content">
-        <canvas id="bg-canvas"></canvas>
+    <div id="main-app">
+        <canvas id="canvas-particles"></canvas>
 
         <header>
-            <span class="hero-tag">Luxury Digital Menu</span>
+            <span class="badge">León, Guanajuato</span>
             <h1>Popurrí</h1>
-            <p class="hero-desc">Sabor artesanal, tecnología de vanguardia.</p>
+            <p style="letter-spacing: 3px; font-weight: 100; color: #555;">SIGNATURE GASTRONOMY</p>
         </header>
 
-        <div class="filter-container">
-            <button class="filter-btn active" onclick="filterMenu('all')">Todo</button>
-            <button class="filter-btn" onclick="filterMenu('brunch')">Brunch</button>
-            <button class="filter-btn" onclick="filterMenu('cafe')">Café</button>
-            <button class="filter-btn" onclick="filterMenu('cocktails')">Bebidas</button>
-        </div>
+        <nav class="nav-scroller">
+            <div class="filter-wrapper">
+                <button class="filter-btn active" onclick="filterData('all')">Colección Completa</button>
+                <button class="filter-btn" onclick="filterData('desayunos')">Desayunos Elite</button>
+                <button class="filter-btn" onclick="filterData('brunch')">Brunch Signature</button>
+                <button class="filter-btn" onclick="filterData('bebidas')">Mixología & Café</button>
+            </div>
+        </nav>
 
-        <div class="container">
-            <div class="menu-grid" id="main-grid">
+        <main class="menu-container">
+            <div class="grid" id="product-grid">
                 </div>
+        </main>
 
-            <section class="info-section">
-                <h2 class="info-title">The Zenith Experience</h2>
-                <div class="steps">
-                    <div class="step">
-                        <h3>01. SELECT</h3>
-                        <p>Explora nuestra selección visual de alta definición diseñada para el deleite.</p>
-                    </div>
-                    <div class="step">
-                        <h3>02. ORDER</h3>
-                        <p>Añade tus favoritos al carrito inteligente sin intermediarios ni comisiones.</p>
-                    </div>
-                    <div class="step">
-                        <h3>03. ENJOY</h3>
-                        <p>Tu pedido llega directamente a nuestra barra vía WhatsApp para una atención inmediata.</p>
-                    </div>
+        <section class="zenith-info">
+            <h2 style="font-family: 'Playfair Display'; font-size: 2.5rem; margin-bottom: 20px;">The Digital Edge</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>Zero Commission</h3>
+                    <p>Nuestra plataforma conecta directamente con su cocina, eliminando intermediarios y maximizando su utilidad por platillo.</p>
                 </div>
-            </section>
-        </div>
+                <div class="info-card">
+                    <h3>High-Speed UX</h3>
+                    <p>Diseñado bajo arquitectura Zenith, garantizando que el cliente vea su menú en menos de 1 segundo.</p>
+                </div>
+                <div class="info-card">
+                    <h3>WhatsApp Sync</h3>
+                    <p>Pedidos en tiempo real con desglose automático, facilitando la logística interna del restaurante.</p>
+                </div>
+            </div>
+        </section>
 
         <footer>
-            <div class="footer-logo">Popurrí</div>
-            <div class="footer-links">
-                <a href="#">Instagram</a>
-                <a href="#">Facebook</a>
-                <a href="#">Ubicación</a>
-            </div>
-            <p style="font-size: 11px; color: #444;">&copy; 2026 Popurrí &bull; Todos los derechos reservados.</p>
-            <div class="zenith-badge">Technology by Zenith Code</div>
+            <div class="f-logo">Popurrí</div>
+            <p style="font-size: 12px; color: #666; max-width: 400px; margin: 0 auto;">Una experiencia culinaria redefinida por la tecnología de Zenith Code.</p>
+            <div class="f-credits">Developed by Zenith Code 2026</div>
         </footer>
     </div>
 
-    <div id="cart-bar">
-        <div class="cart-details">
-            <span id="items-label">0 PLATILLOS SELECCIONADOS</span>
-            <h4 id="total-label">$0.00</h4>
+    <div id="cart-interface">
+        <div class="cart-data">
+            <span id="cart-items-count">0 ARTÍCULOS SELECCIONADOS</span>
+            <h4 id="cart-total-price">$0.00</h4>
         </div>
-        <button class="btn-action" style="width: auto; padding: 15px 30px; margin-top: 0; background: var(--gold); color: black;" onclick="checkout()">PEDIR AHORA</button>
+        <button class="btn-add" style="width: auto; padding: 15px 40px; margin-top: 0; background: var(--gold); color: black; border: none; font-weight: 800;" onclick="executeOrder()">ENVIAR ORDEN</button>
     </div>
 
     <script>
-        // --- DATA DEL MENÚ ---
-        const WHATSAPP = "4791589872";
-        const products = [
-            { id: 1, cat: 'brunch', name: 'Chilaquiles Elite', price: 158, img: 'https://images.unsplash.com/photo-1641322223946-466d79e56701?q=80&w=800' },
-            { id: 2, cat: 'brunch', name: 'Avocado Gold', price: 135, img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?q=80&w=800' },
-            { id: 3, cat: 'cafe', name: 'Velvet Latte', price: 65, img: 'https://images.unsplash.com/photo-1541167760496-162955ed8a9f?q=80&w=800' },
-            { id: 4, cat: 'cocktails', name: 'Margarita Diamond', price: 180, img: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=800' },
-            { id: 5, cat: 'brunch', name: 'Benedictinos Pro', price: 165, img: 'https://images.unsplash.com/photo-1600335895229-6e75511ee923?q=80&w=800' },
-            { id: 6, cat: 'cafe', name: 'Cold Brew Silver', price: 75, img: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=800' }
+        /* ZENITH CORE ENGINE 
+           Architecture: Ultra-Performance v7
+        */
+        const WHATSAPP_API = "4791589872";
+        
+        // Integrando tus 6 imágenes nuevas
+        const menuData = [
+            { id: 1, cat: 'desayunos', name: 'Elite Burger Brunch', price: 185, img: 'uploaded:1000139340.jpg' },
+            { id: 2, cat: 'brunch', name: 'Diamond Pancakes', price: 145, img: 'uploaded:1000139341.jpg' },
+            { id: 3, cat: 'bebidas', name: 'Mixology Refresher', price: 95, img: 'uploaded:1000139342.jpg' },
+            { id: 4, cat: 'desayunos', name: 'Avocado Zenith Toast', price: 130, img: 'uploaded:1000139343.jpg' },
+            { id: 5, cat: 'desayunos', name: 'Chilaquiles del Patrón', price: 160, img: 'uploaded:1000139344.jpg' },
+            { id: 6, cat: 'brunch', name: 'Yogurt Pearl Bowl', price: 120, img: 'uploaded:1000139345.jpg' }
         ];
 
-        let cart = [];
+        let shoppingCart = [];
 
-        // --- LÓGICA DE CARGA (SIMULACIÓN DE RED PESADA) ---
-        window.onload = () => {
+        // --- SISTEMA DE CARGA ---
+        window.addEventListener('load', () => {
             setTimeout(() => {
-                document.getElementById('loader').style.opacity = '0';
+                const loader = document.getElementById('zenith-loader');
+                const app = document.getElementById('main-app');
+                loader.style.opacity = '0';
                 setTimeout(() => {
-                    document.getElementById('loader').style.display = 'none';
-                    document.getElementById('app-content').style.opacity = '1';
-                    document.getElementById('app-content').style.visibility = 'visible';
+                    loader.style.display = 'none';
+                    app.style.opacity = '1';
+                    app.style.visibility = 'visible';
                     document.body.style.overflow = 'auto';
-                    renderItems('all');
-                }, 800);
-            }, 2500); // 2.5s para apreciar la marca Zenith
-            initParticles();
-        };
+                    renderProducts('all');
+                }, 1000);
+            }, 3000); // 3 segundos para posicionamiento de marca
+            initBackground();
+        });
 
-        // --- RENDERIZADO DE PRODUCTOS ---
-        function renderItems(category) {
-            const grid = document.getElementById('main-grid');
+        // --- RENDERIZADO TÉCNICO ---
+        function renderProducts(filter) {
+            const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
             
-            const filtered = category === 'all' ? products : products.filter(p => p.cat === category);
+            const list = filter === 'all' ? menuData : menuData.filter(item => item.cat === filter);
             
-            filtered.forEach(p => {
-                const el = document.createElement('div');
-                el.className = 'card';
-                el.innerHTML = `
-                    <div class="img-box">
-                        <img src="${p.img}" class="card-img" onload="this.style.opacity=1">
+            list.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.innerHTML = `
+                    <div class="item-img-container">
+                        <img src="${item.img}" class="item-img" onload="this.style.opacity=1" alt="${item.name}">
                     </div>
-                    <div class="card-info">
-                        <span class="card-cat">${p.cat}</span>
-                        <h3 class="card-title">${p.name}</h3>
-                        <span class="card-price">$${p.price}.00</span>
-                        <button class="btn-action" onclick="addToCart(${p.id})">Añadir al Pedido</button>
+                    <div class="item-body">
+                        <span class="item-cat">${item.cat}</span>
+                        <h3 class="item-title">${item.name}</h3>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="price-tag">$${item.price}.00</span>
+                            <span style="font-size: 10px; color: #444;">ID: 00${item.id}</span>
+                        </div>
+                        <button class="btn-add" onclick="pushToCart(${item.id})">Añadir a la Experiencia</button>
                     </div>
                 `;
-                grid.appendChild(el);
+                grid.appendChild(card);
             });
         }
 
-        // --- SISTEMA DE CARRITO ---
-        function addToCart(id) {
-            const item = products.find(p => p.id === id);
-            cart.push(item);
+        // --- LÓGICA DE CARRITO ---
+        function pushToCart(id) {
+            const product = menuData.find(p => p.id === id);
+            shoppingCart.push(product);
             
-            const bar = document.getElementById('cart-bar');
-            bar.classList.add('active');
+            const cartBar = document.getElementById('cart-interface');
+            cartBar.classList.add('active');
             
-            const total = cart.reduce((sum, i) => sum + i.price, 0);
-            document.getElementById('total-label').innerText = `$${total}.00`;
-            document.getElementById('items-label').innerText = `${cart.length} PLATILLOS SELECCIONADOS`;
+            const total = shoppingCart.reduce((acc, curr) => acc + curr.price, 0);
+            document.getElementById('cart-total-price').innerText = `$${total}.00`;
+            document.getElementById('cart-items-count').innerText = `${shoppingCart.length} ARTÍCULOS SELECCIONADOS`;
         }
 
-        function filterMenu(cat) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        function filterData(cat) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-            renderItems(cat);
+            renderProducts(cat);
         }
 
-        function checkout() {
-            let message = "*NUEVA ORDEN - ZENITH INTERFACE*\n\n";
-            cart.forEach(i => message += `• ${i.name} ($${i.price})\n`);
-            message += `\n*TOTAL: $${cart.reduce((s,i) => s+i.price, 0)} MXN*`;
-            window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`);
+        // --- EXPORTACIÓN A WHATSAPP ---
+        function executeOrder() {
+            let orderText = "*ORDEN DIGITAL - POPURRÍ (ZENITH CODE)*\n\n";
+            shoppingCart.forEach((item, index) => {
+                orderText += `${index + 1}. ${item.name} - $${item.price}\n`;
+            });
+            const totalFinal = shoppingCart.reduce((s, i) => s + i.price, 0);
+            orderText += `\n*TOTAL A PAGAR: $${totalFinal}.00 MXN*`;
+            
+            window.open(`https://wa.me/${WHATSAPP_API}?text=${encodeURIComponent(orderText)}`);
         }
 
-        // --- MOTOR DE PARTÍCULAS (GOLDEN DUST) ---
-        const canvas = document.getElementById('bg-canvas');
+        // --- MOTOR DE PARTÍCULAS CANVAS ---
+        const canvas = document.getElementById('canvas-particles');
         const ctx = canvas.getContext('2d');
-        let pts = [];
+        let particlesArray = [];
 
-        function initParticles() {
+        function initBackground() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            for(let i=0; i<60; i++) {
-                pts.push({
+            for(let i=0; i<70; i++) {
+                particlesArray.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
-                    s: Math.random() * 2,
-                    v: Math.random() * 0.4 + 0.1
+                    size: Math.random() * 2.5,
+                    speed: Math.random() * 0.4 + 0.1
                 });
             }
-            animate();
+            animateBackground();
         }
 
-        function animate() {
+        function animateBackground() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#c5a059';
-            pts.forEach(p => {
-                p.y -= p.v;
+            particlesArray.forEach(p => {
+                p.y -= p.speed;
                 if(p.y < 0) p.y = canvas.height;
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
                 ctx.fill();
             });
-            requestAnimationFrame(animate);
+            requestAnimationFrame(animateBackground);
         }
 
-        // --- AJUSTE DE VENTANA ---
-        window.onresize = () => {
+        window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-        };
+        });
+
     </script>
 </body>
 </html>
