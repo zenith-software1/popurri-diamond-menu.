@@ -3,328 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Zenith Code | Luxury Digital Architecture</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@100;200;300;400;600;800&display=swap" rel="stylesheet">
-    
+    <title>Popurrí | Menú Profesional</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        /* ZENITH CODE DESIGN SYSTEM 
-           Propiedad Intelectual de Uziel Noriega
-        */
-        :root {
-            --gold: #c5a059;
-            --gold-gradient: linear-gradient(135deg, #ad8a43 0%, #f7e0a8 50%, #ad8a43 100%);
-            --black-ultra: #030303;
-            --black-card: #0a0a0a;
-            --glass: rgba(255, 255, 255, 0.02);
-            --glass-border: rgba(197, 160, 89, 0.2);
-            --text-main: #ffffff;
-            --text-dim: #777777;
-            --transition-smooth: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        :root { --gold: #c5a059; --black: #000; --card: #0a0a0a; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--black); color: #fff; font-family: 'Inter', sans-serif; }
+
+        header { padding: 40px 20px; text-align: center; border-bottom: 1px solid #111; }
+        h1 { font-family: 'Cinzel', serif; font-size: 2.8rem; color: var(--gold); }
+        .tag { font-size: 10px; letter-spacing: 4px; color: #444; text-transform: uppercase; }
+
+        nav { position: sticky; top: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); z-index: 100; padding: 15px; border-bottom: 1px solid #1a1a1a; }
+        .scroll { display: flex; gap: 10px; overflow-x: auto; justify-content: center; }
+        .scroll::-webkit-scrollbar { display: none; }
+        .btn { background: transparent; border: 1px solid #222; color: #666; padding: 8px 15px; font-size: 10px; text-transform: uppercase; cursor: pointer; }
+        .btn.active { border-color: var(--gold); color: var(--gold); }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .item { background: var(--card); border: 1px solid #111; border-radius: 8px; overflow: hidden; }
+
+        .img-container { width: 100%; height: 250px; background: #050505; position: relative; }
+        .item-img { 
+            width: 100%; height: 100%; object-fit: cover; 
+            display: block; opacity: 0; transition: opacity 0.5s ease-in;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+        .info { padding: 20px; }
+        .name { font-family: 'Cinzel', serif; font-size: 1.2rem; margin-bottom: 8px; color: #fff; }
+        .desc { font-size: 12px; color: #555; line-height: 1.5; margin-bottom: 15px; height: 36px; overflow: hidden; }
+        .bottom { display: flex; justify-content: space-between; align-items: center; }
+        .price { font-weight: 700; color: var(--gold); font-size: 1.1rem; }
+        .add { background: var(--gold); color: #000; border: none; padding: 8px 15px; font-size: 10px; font-weight: 800; border-radius: 4px; }
 
-        body {
-            background-color: var(--black-ultra);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            overflow: hidden; /* Controlado por el Loader */
-            line-height: 1.6;
-        }
-
-        /* --- ZENITH SPLASH SCREEN --- */
-        #zenith-loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--black-ultra); z-index: 99999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-        }
-
-        .loader-sub { font-size: 10px; letter-spacing: 10px; color: var(--gold); text-transform: uppercase; margin-bottom: 20px; opacity: 0.5; }
-        
-        .zenith-blink {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem; font-style: italic; color: white;
-            animation: zenith-glitch 2s infinite;
-            text-align: center;
-        }
-
-        @keyframes zenith-glitch {
-            0%, 15%, 100% { opacity: 1; text-shadow: 0 0 20px rgba(197, 160, 89, 0.6); }
-            5% { opacity: 0.1; transform: skewX(2deg); }
-            7% { opacity: 1; transform: skewX(0); }
-            9% { opacity: 0.4; }
-        }
-
-        /* --- BACKGROUND ENGINE --- */
-        #canvas-particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.3; }
-
-        /* --- MAIN INTERFACE --- */
-        #main-app { opacity: 0; visibility: hidden; transition: opacity 2s ease; }
-
-        header { padding: 120px 20px 60px; text-align: center; position: relative; }
-        .badge { color: var(--gold); font-size: 12px; letter-spacing: 8px; text-transform: uppercase; margin-bottom: 15px; display: block; }
-        h1 { font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 12vw, 6rem); font-weight: 400; font-style: italic; margin-bottom: 15px; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        /* --- NAV FILTERS --- */
-        .nav-scroller {
-            position: sticky; top: 0; z-index: 1000;
-            background: rgba(3,3,3,0.9); backdrop-filter: blur(15px);
-            padding: 20px 0; border-bottom: 1px solid var(--glass-border);
-        }
-        .filter-wrapper { display: flex; justify-content: center; gap: 15px; overflow-x: auto; padding: 0 20px; }
-        .filter-btn {
-            background: var(--glass); border: 1px solid var(--glass-border); color: var(--text-dim);
-            padding: 10px 25px; border-radius: 2px; font-size: 11px; text-transform: uppercase;
-            letter-spacing: 2px; cursor: pointer; transition: var(--transition-smooth); white-space: nowrap;
-        }
-        .filter-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(197, 160, 89, 0.1); }
-
-        /* --- MENU GRID --- */
-        .menu-container { max-width: 1400px; margin: 60px auto; padding: 0 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px; }
-
-        .item-card {
-            background: var(--black-card); border: 1px solid var(--glass-border);
-            border-radius: 0px; overflow: hidden; position: relative; transition: var(--transition-smooth);
-        }
-        .item-card:hover { transform: translateY(-15px); border-color: var(--gold); }
-
-        .item-img-container { width: 100%; height: 350px; overflow: hidden; position: relative; background: #111; }
-        .item-img { width: 100%; height: 100%; object-fit: cover; transition: transform 2s ease; opacity: 0; }
-        .item-card:hover .item-img { transform: scale(1.1); }
-
-        .item-body { padding: 30px; }
-        .item-cat { font-size: 10px; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; display: block; }
-        .item-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 15px; font-weight: 400; }
-        
-        .price-tag { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--gold-light); }
-        .btn-add {
-            width: 100%; margin-top: 25px; padding: 15px; background: transparent;
-            border: 1px solid var(--gold); color: var(--gold); font-size: 11px;
-            text-transform: uppercase; letter-spacing: 3px; cursor: pointer; transition: 0.4s;
-        }
-        .btn-add:hover { background: var(--gold); color: black; font-weight: 800; }
-
-        /* --- INFO SECTION --- */
-        .zenith-info { padding: 100px 20px; text-align: center; background: rgba(197, 160, 89, 0.02); margin: 100px 0; }
-        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 50px; max-width: 1200px; margin: 50px auto; }
-        .info-card h3 { font-family: 'Playfair Display', serif; color: var(--gold); margin-bottom: 20px; font-size: 1.5rem; }
-        .info-card p { font-weight: 200; color: var(--text-dim); font-size: 14px; line-height: 2; }
-
-        /* --- SHOPPING CART --- */
-        #cart-interface {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(200%);
-            width: 90%; max-width: 550px; background: rgba(5,5,5,0.95); backdrop-filter: blur(25px);
-            border: 1px solid var(--gold); padding: 25px 40px; border-radius: 4px;
-            display: flex; justify-content: space-between; align-items: center; z-index: 9999;
-            transition: var(--transition-smooth);
-        }
-        #cart-interface.active { transform: translateX(-50%) translateY(0); }
-        .cart-data h4 { font-family: 'Playfair Display', serif; font-size: 1.6rem; }
-        .cart-data span { font-size: 10px; letter-spacing: 3px; color: var(--gold); }
-
-        /* --- FOOTER IDENTITY --- */
-        footer { padding: 100px 20px; text-align: center; border-top: 1px solid #111; }
-        .f-logo { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-style: italic; color: var(--gold); margin-bottom: 30px; }
-        .f-credits { font-size: 11px; letter-spacing: 6px; color: #333; text-transform: uppercase; margin-top: 50px; }
-
+        footer { padding: 40px; text-align: center; font-size: 9px; color: #222; letter-spacing: 3px; }
     </style>
 </head>
 <body>
 
-    <div id="zenith-loader">
-        <span class="loader-sub">Next-Gen Interface</span>
-        <div class="zenith-blink">Zenith Code</div>
-    </div>
+    <header>
+        <div class="tag">Next-Gen Menu</div>
+        <h1>Popurrí</h1>
+    </header>
 
-    <div id="main-app">
-        <canvas id="canvas-particles"></canvas>
-
-        <header>
-            <span class="badge">León, Guanajuato</span>
-            <h1>Popurrí</h1>
-            <p style="letter-spacing: 3px; font-weight: 100; color: #555;">SIGNATURE GASTRONOMY</p>
-        </header>
-
-        <nav class="nav-scroller">
-            <div class="filter-wrapper">
-                <button class="filter-btn active" onclick="filterData('all')">Colección Completa</button>
-                <button class="filter-btn" onclick="filterData('desayunos')">Desayunos Elite</button>
-                <button class="filter-btn" onclick="filterData('brunch')">Brunch Signature</button>
-                <button class="filter-btn" onclick="filterData('bebidas')">Mixología & Café</button>
-            </div>
-        </nav>
-
-        <main class="menu-container">
-            <div class="grid" id="product-grid">
-                </div>
-        </main>
-
-        <section class="zenith-info">
-            <h2 style="font-family: 'Playfair Display'; font-size: 2.5rem; margin-bottom: 20px;">The Digital Edge</h2>
-            <div class="info-grid">
-                <div class="info-card">
-                    <h3>Zero Commission</h3>
-                    <p>Nuestra plataforma conecta directamente con su cocina, eliminando intermediarios y maximizando su utilidad por platillo.</p>
-                </div>
-                <div class="info-card">
-                    <h3>High-Speed UX</h3>
-                    <p>Diseñado bajo arquitectura Zenith, garantizando que el cliente vea su menú en menos de 1 segundo.</p>
-                </div>
-                <div class="info-card">
-                    <h3>WhatsApp Sync</h3>
-                    <p>Pedidos en tiempo real con desglose automático, facilitando la logística interna del restaurante.</p>
-                </div>
-            </div>
-        </section>
-
-        <footer>
-            <div class="f-logo">Popurrí</div>
-            <p style="font-size: 12px; color: #666; max-width: 400px; margin: 0 auto;">Una experiencia culinaria redefinida por la tecnología de Zenith Code.</p>
-            <div class="f-credits">Developed by Zenith Code 2026</div>
-        </footer>
-    </div>
-
-    <div id="cart-interface">
-        <div class="cart-data">
-            <span id="cart-items-count">0 ARTÍCULOS SELECCIONADOS</span>
-            <h4 id="cart-total-price">$0.00</h4>
+    <nav>
+        <div class="scroll">
+            <button class="btn active" onclick="filter('all')">Todo</button>
+            <button class="btn" onclick="filter('brunch')">Brunch</button>
+            <button class="btn" onclick="filter('bebidas')">Bebidas</button>
         </div>
-        <button class="btn-add" style="width: auto; padding: 15px 40px; margin-top: 0; background: var(--gold); color: black; border: none; font-weight: 800;" onclick="executeOrder()">ENVIAR ORDEN</button>
-    </div>
+    </nav>
+
+    <div class="grid" id="grid"></div>
+
+    <footer>ZENITH CODE ARCHITECTURE 2026</footer>
 
     <script>
-        /* ZENITH CORE ENGINE 
-           Architecture: Ultra-Performance v7
-        */
-        const WHATSAPP_API = "4791589872";
-        
-        // Integrando tus 6 imágenes nuevas
-        const menuData = [
-            { id: 1, cat: 'desayunos', name: 'Elite Burger Brunch', price: 185, img: 'uploaded:1000139340.jpg' },
-            { id: 2, cat: 'brunch', name: 'Diamond Pancakes', price: 145, img: 'uploaded:1000139341.jpg' },
-            { id: 3, cat: 'bebidas', name: 'Mixology Refresher', price: 95, img: 'uploaded:1000139342.jpg' },
-            { id: 4, cat: 'desayunos', name: 'Avocado Zenith Toast', price: 130, img: 'uploaded:1000139343.jpg' },
-            { id: 5, cat: 'desayunos', name: 'Chilaquiles del Patrón', price: 160, img: 'uploaded:1000139344.jpg' },
-            { id: 6, cat: 'brunch', name: 'Yogurt Pearl Bowl', price: 120, img: 'uploaded:1000139345.jpg' }
+        // Fíjate cómo ahora uso enlaces "https://" para asegurar que carguen
+        const products = [
+            { id: 1, cat: 'brunch', name: 'Elite Burger', desc: 'Carne premium y pan artesanal.', price: 185, img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80' },
+            { id: 2, cat: 'brunch', name: 'Diamond Pancakes', desc: 'Frutos rojos y miel de agave.', price: 145, img: 'https://images.unsplash.com/photo-1528207776546-384cb1119b27?auto=format&fit=crop&w=500&q=80' },
+            { id: 3, cat: 'bebidas', name: 'Mixology Refresher', desc: 'Cítricos y hierbas frescas.', price: 95, img: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=500&q=80' },
+            { id: 4, cat: 'brunch', name: 'Avocado Zenith', desc: 'Aguacate y huevo pochado.', price: 130, img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=500&q=80' },
+            { id: 5, cat: 'brunch', name: 'Chilaquiles Elite', desc: 'Salsa verde y crema de rancho.', price: 158, img: 'https://images.unsplash.com/photo-1626200419199-391ae4be7a41?auto=format&fit=crop&w=500&q=80' },
+            { id: 6, cat: 'brunch', name: 'Pearl Bowl', desc: 'Yogurt griego y granola.', price: 120, img: 'https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=500&q=80' }
         ];
 
-        let shoppingCart = [];
+        function render(cat) {
+            const container = document.getElementById('grid');
+            container.innerHTML = '';
+            const list = cat === 'all' ? products : products.filter(p => p.cat === cat);
 
-        // --- SISTEMA DE CARGA ---
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const loader = document.getElementById('zenith-loader');
-                const app = document.getElementById('main-app');
-                loader.style.opacity = '0';
-                setTimeout(() => {
-                    loader.style.display = 'none';
-                    app.style.opacity = '1';
-                    app.style.visibility = 'visible';
-                    document.body.style.overflow = 'auto';
-                    renderProducts('all');
-                }, 1000);
-            }, 3000); // 3 segundos para posicionamiento de marca
-            initBackground();
-        });
-
-        // --- RENDERIZADO TÉCNICO ---
-        function renderProducts(filter) {
-            const grid = document.getElementById('product-grid');
-            grid.innerHTML = '';
-            
-            const list = filter === 'all' ? menuData : menuData.filter(item => item.cat === filter);
-            
-            list.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'item-card';
-                card.innerHTML = `
-                    <div class="item-img-container">
-                        <img src="${item.img}" class="item-img" onload="this.style.opacity=1" alt="${item.name}">
-                    </div>
-                    <div class="item-body">
-                        <span class="item-cat">${item.cat}</span>
-                        <h3 class="item-title">${item.name}</h3>
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span class="price-tag">$${item.price}.00</span>
-                            <span style="font-size: 10px; color: #444;">ID: 00${item.id}</span>
+            list.forEach(p => {
+                container.innerHTML += `
+                    <div class="item">
+                        <div class="img-container">
+                            <img src="${p.img}" class="item-img" onload="this.style.opacity=1">
                         </div>
-                        <button class="btn-add" onclick="pushToCart(${item.id})">Añadir a la Experiencia</button>
+                        <div class="info">
+                            <h3 class="name">${p.name}</h3>
+                            <p class="desc">${p.desc}</p>
+                            <div class="bottom">
+                                <span class="price">$${p.price}</span>
+                                <button class="add">Añadir</button>
+                            </div>
+                        </div>
                     </div>
                 `;
-                grid.appendChild(card);
             });
         }
 
-        // --- LÓGICA DE CARRITO ---
-        function pushToCart(id) {
-            const product = menuData.find(p => p.id === id);
-            shoppingCart.push(product);
-            
-            const cartBar = document.getElementById('cart-interface');
-            cartBar.classList.add('active');
-            
-            const total = shoppingCart.reduce((acc, curr) => acc + curr.price, 0);
-            document.getElementById('cart-total-price').innerText = `$${total}.00`;
-            document.getElementById('cart-items-count').innerText = `${shoppingCart.length} ARTÍCULOS SELECCIONADOS`;
-        }
-
-        function filterData(cat) {
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        function filter(cat) {
+            document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
-            renderProducts(cat);
+            render(cat);
         }
 
-        // --- EXPORTACIÓN A WHATSAPP ---
-        function executeOrder() {
-            let orderText = "*ORDEN DIGITAL - POPURRÍ (ZENITH CODE)*\n\n";
-            shoppingCart.forEach((item, index) => {
-                orderText += `${index + 1}. ${item.name} - $${item.price}\n`;
-            });
-            const totalFinal = shoppingCart.reduce((s, i) => s + i.price, 0);
-            orderText += `\n*TOTAL A PAGAR: $${totalFinal}.00 MXN*`;
-            
-            window.open(`https://wa.me/${WHATSAPP_API}?text=${encodeURIComponent(orderText)}`);
-        }
-
-        // --- MOTOR DE PARTÍCULAS CANVAS ---
-        const canvas = document.getElementById('canvas-particles');
-        const ctx = canvas.getContext('2d');
-        let particlesArray = [];
-
-        function initBackground() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            for(let i=0; i<70; i++) {
-                particlesArray.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 2.5,
-                    speed: Math.random() * 0.4 + 0.1
-                });
-            }
-            animateBackground();
-        }
-
-        function animateBackground() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#c5a059';
-            particlesArray.forEach(p => {
-                p.y -= p.speed;
-                if(p.y < 0) p.y = canvas.height;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fill();
-            });
-            requestAnimationFrame(animateBackground);
-        }
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
+        render('all');
     </script>
 </body>
 </html>
