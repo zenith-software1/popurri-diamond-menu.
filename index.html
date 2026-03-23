@@ -2,104 +2,202 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Popurrí | Menú Profesional</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popurrí Diamond Menú | Demo Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Outfit:wght@300;400;600;900&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #c5a059; --black: #000; --card: #0a0a0a; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--black); color: #fff; font-family: 'Inter', sans-serif; }
-
-        header { padding: 40px 20px; text-align: center; border-bottom: 1px solid #111; }
-        h1 { font-family: 'Cinzel', serif; font-size: 2.8rem; color: var(--gold); }
-        .tag { font-size: 10px; letter-spacing: 4px; color: #444; text-transform: uppercase; }
-
-        nav { position: sticky; top: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); z-index: 100; padding: 15px; border-bottom: 1px solid #1a1a1a; }
-        .scroll { display: flex; gap: 10px; overflow-x: auto; justify-content: center; }
-        .scroll::-webkit-scrollbar { display: none; }
-        .btn { background: transparent; border: 1px solid #222; color: #666; padding: 8px 15px; font-size: 10px; text-transform: uppercase; cursor: pointer; }
-        .btn.active { border-color: var(--gold); color: var(--gold); }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto; }
-        .item { background: var(--card); border: 1px solid #111; border-radius: 8px; overflow: hidden; }
-
-        .img-container { width: 100%; height: 250px; background: #050505; position: relative; }
-        .item-img { 
-            width: 100%; height: 100%; object-fit: cover; 
-            display: block; opacity: 0; transition: opacity 0.5s ease-in;
+        :root {
+            --diamond-blue: #00f2ff;
+            --deep-purple: #7000ff;
+            --dark-bg: #050505;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
-        .info { padding: 20px; }
-        .name { font-family: 'Cinzel', serif; font-size: 1.2rem; margin-bottom: 8px; color: #fff; }
-        .desc { font-size: 12px; color: #555; line-height: 1.5; margin-bottom: 15px; height: 36px; overflow: hidden; }
-        .bottom { display: flex; justify-content: space-between; align-items: center; }
-        .price { font-weight: 700; color: var(--gold); font-size: 1.1rem; }
-        .add { background: var(--gold); color: #000; border: none; padding: 8px 15px; font-size: 10px; font-weight: 800; border-radius: 4px; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            margin: 0; background: var(--dark-bg);
+            color: white; font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+        }
 
-        footer { padding: 40px; text-align: center; font-size: 9px; color: #222; letter-spacing: 3px; }
+        /* Fondo Animado */
+        .bg-glow {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% -20%, #1a0033 0%, #050505 80%);
+            z-index: -1;
+        }
+
+        /* --- HEADER MAMALÓN --- */
+        header {
+            padding: 40px 20px; text-align: center;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+        }
+
+        .logo-container {
+            position: relative; display: inline-block; margin-bottom: 10px;
+        }
+
+        .logo-text {
+            font-family: 'Syncopate', sans-serif; font-size: 2.2rem;
+            text-transform: uppercase; letter-spacing: -2px;
+            background: linear-gradient(90deg, #fff, var(--diamond-blue));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(0, 242, 255, 0.4));
+        }
+
+        .status-online {
+            display: flex; align-items: center; justify-content: center;
+            gap: 8px; font-size: 0.8rem; color: #00ff88; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+
+        .dot { height: 8px; width: 8px; background: #00ff88; border-radius: 50%; box-shadow: 0 0 10px #00ff88; animation: blink 1.5s infinite; }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        /* --- CATEGORÍAS --- */
+        .categories {
+            display: flex; overflow-x: auto; padding: 10px 20px;
+            gap: 12px; scrollbar-width: none;
+        }
+        .categories::-webkit-scrollbar { display: none; }
+
+        .cat-btn {
+            padding: 12px 25px; background: var(--glass);
+            border: 1px solid var(--glass-border); border-radius: 15px;
+            white-space: nowrap; font-weight: 600; color: #888;
+            transition: 0.3s;
+        }
+        .cat-btn.active {
+            background: white; color: black; box-shadow: 0 0 20px rgba(255,255,255,0.2);
+            border-color: white;
+        }
+
+        /* --- GRID DE PRODUCTOS --- */
+        .menu-grid { padding: 20px; display: grid; gap: 20px; }
+
+        .item-card {
+            background: var(--glass); border: 1px solid var(--glass-border);
+            border-radius: 24px; overflow: hidden; position: relative;
+            backdrop-filter: blur(10px); transition: 0.4s;
+        }
+
+        .item-card:active { transform: scale(0.96); }
+
+        .item-img {
+            width: 100%; height: 220px; background-size: cover;
+            background-position: center; position: relative;
+        }
+
+        .item-price {
+            position: absolute; bottom: 15px; right: 15px;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+            padding: 8px 15px; border-radius: 12px; border: 1px solid var(--diamond-blue);
+            color: var(--diamond-blue); font-weight: 900; font-size: 1.2rem;
+        }
+
+        .item-info { padding: 20px; }
+        .item-name { font-size: 1.4rem; font-weight: 800; margin: 0 0 8px; }
+        .item-desc { color: #888; font-size: 0.9rem; line-height: 1.4; margin-bottom: 20px; }
+
+        .btn-add {
+            width: 100%; padding: 16px; border: none; border-radius: 16px;
+            background: linear-gradient(90deg, var(--deep-purple), var(--diamond-blue));
+            color: white; font-weight: 800; font-size: 1rem;
+            text-transform: uppercase; letter-spacing: 1px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+
+        /* --- BOTÓN FLOTANTE DE CARRITO --- */
+        .cart-float {
+            position: fixed; bottom: 30px; right: 20px; left: 20px;
+            background: white; color: black; padding: 20px;
+            border-radius: 20px; display: flex; justify-content: space-between;
+            align-items: center; font-weight: 900; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            z-index: 100; animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp { from { transform: translateY(100px); } to { transform: translateY(0); } }
+
+        /* --- FOOTER DEMO --- */
+        .footer-demo {
+            padding: 60px 20px 120px; text-align: center; color: #444; font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
 
+    <div class="bg-glow"></div>
+
     <header>
-        <div class="tag">Next-Gen Menu</div>
-        <h1>Popurrí</h1>
+        <div class="logo-container">
+            <div class="logo-text">DIAMOND</div>
+            <div class="status-online"><div class="dot"></div> Menú Interactivo</div>
+        </div>
     </header>
 
-    <nav>
-        <div class="scroll">
-            <button class="btn active" onclick="filter('all')">Todo</button>
-            <button class="btn" onclick="filter('brunch')">Brunch</button>
-            <button class="btn" onclick="filter('bebidas')">Bebidas</button>
+    <div class="categories">
+        <div class="cat-btn active">💎 Destacados</div>
+        <div class="cat-btn">🍔 Burgers</div>
+        <div class="cat-btn">🌮 Tacos</div>
+        <div class="cat-btn">🍹 Drinks</div>
+    </div>
+
+    <main class="menu-grid">
+        
+        <div class="item-card">
+            <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=600');">
+                <div class="item-price">$185</div>
+            </div>
+            <div class="item-info">
+                <h3 class="item-name">Diamond Burger</h3>
+                <p class="item-desc">Doble carne angus, queso camembert fundido, cebolla caramelizada al vino tinto y pan brioche artesanal.</p>
+                <button class="btn-add" onclick="order('Diamond Burger')">Pedir por WhatsApp</button>
+            </div>
         </div>
-    </nav>
 
-    <div class="grid" id="grid"></div>
+        <div class="item-card">
+            <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1552332386-f8dd00dc2f85?q=80&w=600');">
+                <div class="item-price">$45</div>
+            </div>
+            <div class="item-info">
+                <h3 class="item-name">Taco de Autor</h3>
+                <p class="item-desc">Rib-eye premium con costra de queso, guacamole cremoso y ceniza de habanero en tortilla hecha a mano.</p>
+                <button class="btn-add" onclick="order('Taco de Autor')">Pedir por WhatsApp</button>
+            </div>
+        </div>
 
-    <footer>ZENITH CODE ARCHITECTURE 2026</footer>
+        <div class="item-card">
+            <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=600');">
+                <div class="item-price">$120</div>
+            </div>
+            <div class="item-info">
+                <h3 class="item-name">Gin Pink Neon</h3>
+                <p class="item-desc">Ginebra premium con frutos rojos, tónica artesanal y un toque de glitter comestible.</p>
+                <button class="btn-add" onclick="order('Gin Pink Neon')">Pedir por WhatsApp</button>
+            </div>
+        </div>
+
+    </main>
+
+    <div class="cart-float">
+        <div>🛒 VER MI PEDIDO</div>
+        <div>$0.00</div>
+    </div>
+
+    <footer class="footer-demo">
+        <p>POWERED BY ZENITH CODE</p>
+        <p>Esta es una demostración técnica. Los pedidos se simulan vía WhatsApp al 479 152 7895</p>
+    </footer>
 
     <script>
-        // Fíjate cómo ahora uso enlaces "https://" para asegurar que carguen
-        const products = [
-            { id: 1, cat: 'brunch', name: 'Elite Burger', desc: 'Carne premium y pan artesanal.', price: 185, img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80' },
-            { id: 2, cat: 'brunch', name: 'Diamond Pancakes', desc: 'Frutos rojos y miel de agave.', price: 145, img: 'https://images.unsplash.com/photo-1528207776546-384cb1119b27?auto=format&fit=crop&w=500&q=80' },
-            { id: 3, cat: 'bebidas', name: 'Mixology Refresher', desc: 'Cítricos y hierbas frescas.', price: 95, img: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=500&q=80' },
-            { id: 4, cat: 'brunch', name: 'Avocado Zenith', desc: 'Aguacate y huevo pochado.', price: 130, img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=500&q=80' },
-            { id: 5, cat: 'brunch', name: 'Chilaquiles Elite', desc: 'Salsa verde y crema de rancho.', price: 158, img: 'https://images.unsplash.com/photo-1626200419199-391ae4be7a41?auto=format&fit=crop&w=500&q=80' },
-            { id: 6, cat: 'brunch', name: 'Pearl Bowl', desc: 'Yogurt griego y granola.', price: 120, img: 'https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=500&q=80' }
-        ];
-
-        function render(cat) {
-            const container = document.getElementById('grid');
-            container.innerHTML = '';
-            const list = cat === 'all' ? products : products.filter(p => p.cat === cat);
-
-            list.forEach(p => {
-                container.innerHTML += `
-                    <div class="item">
-                        <div class="img-container">
-                            <img src="${p.img}" class="item-img" onload="this.style.opacity=1">
-                        </div>
-                        <div class="info">
-                            <h3 class="name">${p.name}</h3>
-                            <p class="desc">${p.desc}</p>
-                            <div class="bottom">
-                                <span class="price">$${p.price}</span>
-                                <button class="add">Añadir</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
+        function order(product) {
+            const num = "524791527895";
+            const msg = `¡Hola! Me gustaría ordenar el platillo de la Demo: *${product}*`;
+            window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`, '_blank');
         }
-
-        function filter(cat) {
-            document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            render(cat);
-        }
-
-        render('all');
     </script>
 </body>
 </html>
