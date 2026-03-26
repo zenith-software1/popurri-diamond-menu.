@@ -3,84 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Popurrí Diamond Menú | Demo Full</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
+    <title>Diamond Menu - Demo Zenith Code</title>
     <style>
-        :root { --diamond: #00f2ff; --purple: #7000ff; --dark: #080808; --glass: rgba(255,255,255,0.05); }
-        body { margin: 0; background: var(--dark); color: white; font-family: 'Outfit', sans-serif; }
-        header { padding: 30px; text-align: center; background: linear-gradient(to bottom, #111, transparent); }
-        .logo { font-size: 2rem; font-weight: 900; letter-spacing: -1px; background: linear-gradient(90deg, #fff, var(--diamond)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        :root {
+            --bg-dark: #121212;
+            --card-bg: #1e1e1e;
+            --gold: #d4af37;
+            --text-light: #ffffff;
+            --text-gray: #aaaaaa;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-light); padding-bottom: 150px; }
         
-        /* Categorías Funcionales */
-        .categories { display: flex; overflow-x: auto; padding: 10px 20px; gap: 10px; position: sticky; top: 0; background: var(--dark); z-index: 100; }
-        .cat-btn { padding: 10px 20px; background: var(--glass); border: 1px solid #222; border-radius: 50px; color: #888; cursor: pointer; white-space: nowrap; transition: 0.3s; }
-        .cat-btn.active { background: var(--diamond); color: #000; font-weight: bold; border-color: var(--diamond); }
+        .header { text-align: center; padding: 30px 20px 20px; }
+        .header h1 { color: var(--gold); font-size: 2.2rem; font-weight: 900; letter-spacing: 2px; }
+        .header p { color: var(--text-gray); font-size: 0.95rem; margin-top: 5px; }
+        
+        /* FILTROS DE CATEGORÍAS */
+        .categories { display: flex; overflow-x: auto; gap: 12px; padding: 15px 20px; scrollbar-width: none; }
+        .categories::-webkit-scrollbar { display: none; }
+        .category-btn { background: #2a2a2a; color: var(--text-gray); border: 1px solid #333; padding: 10px 20px; border-radius: 25px; white-space: nowrap; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
+        .category-btn.active { background: var(--gold); color: #000; border-color: var(--gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
+        
+        /* CUADRÍCULA DE MENÚ CON TRANSICIONES */
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
+        .menu-item { background: var(--card-bg); border-radius: 12px; overflow: hidden; position: relative; display: flex; flex-direction: column; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); opacity: 1; transform: scale(1); }
+        
+        /* Clase para ocultar suavemente */
+        .menu-item.hide { opacity: 0; transform: scale(0.8); pointer-events: none; }
+        /* Clase para quitar del DOM después de la animación */
+        .menu-item.remove { display: none; }
 
-        /* Grid */
-        .menu-grid { padding: 20px; display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
-        .item-card { background: var(--glass); border: 1px solid #222; border-radius: 20px; overflow: hidden; display: block; animation: fadeIn 0.5s ease; }
-        .item-img { width: 100%; height: 180px; background-size: cover; background-position: center; position: relative; }
-        .price-tag { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: var(--diamond); padding: 5px 10px; border-radius: 8px; font-weight: 900; border: 1px solid var(--diamond); }
-        .info { padding: 15px; }
-        .btn-order { width: 100%; padding: 12px; background: #25d366; color: #000; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; }
+        .menu-item img { width: 100%; height: 130px; object-fit: cover; }
+        .price-tag { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.8); border: 1px solid var(--gold); color: var(--gold); padding: 5px 10px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; backdrop-filter: blur(5px); }
+        .item-info { padding: 12px; display: flex; flex-direction: column; flex-grow: 1; }
+        .item-info h3 { font-size: 1.1rem; margin-bottom: 5px; color: #fff; }
+        .item-info p { font-size: 0.8rem; color: var(--text-gray); margin-bottom: 12px; flex-grow: 1; line-height: 1.3; }
+        .add-btn { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; text-transform: uppercase; font-size: 0.85rem; }
+        .add-btn:active { background: var(--gold); color: #000; }
         
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .hidden { display: none; }
+        /* CANASTA ESTILOS (IGUAL QUE ANTES) */
+        .cart-overlay { position: fixed; bottom: 0; left: 0; width: 100%; background: #151515; border-top-left-radius: 25px; border-top-right-radius: 25px; border-top: 1px solid var(--gold); padding: 25px 20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.9); transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); z-index: 1000; max-height: 85vh; overflow-y: auto; }
+        .cart-overlay.open { transform: translateY(0); }
+        .cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 15px; }
+        .cart-header h2 { color: var(--gold); font-size: 1.5rem; }
+        .close-cart { background: #333; border: none; color: #fff; width: 35px; height: 35px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; justify-content: center; align-items: center; }
+        
+        .cart-items { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; background: #222; padding: 12px 15px; border-radius: 10px; border-left: 3px solid var(--gold); }
+        .item-details h4 { font-size: 1rem; margin-bottom: 3px; }
+        .item-details span { color: var(--text-gray); font-size: 0.85rem; }
+        .item-controls { display: flex; align-items: center; gap: 12px; background: #111; padding: 5px; border-radius: 8px; }
+        .ctrl-btn { background: transparent; color: var(--gold); border: none; width: 25px; height: 25px; font-weight: bold; font-size: 1.2rem; cursor: pointer; }
+        
+        .cart-totals { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 15px; background: #1a1a1a; border-radius: 10px; }
+        .cart-totals span { color: var(--text-gray); font-size: 1.1rem; }
+        .cart-totals h3 { color: var(--gold); font-size: 1.5rem; }
+        
+        .whatsapp-btn { background: var(--gold); color: #000; width: 100%; padding: 16px; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .floating-cart-btn { position: fixed; bottom: 25px; right: 20px; background: var(--gold); color: #000; border: none; padding: 15px 25px; border-radius: 30px; font-weight: bold; font-size: 1rem; box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4); cursor: pointer; z-index: 999; display: flex; align-items: center; gap: 10px; transition: transform 0.2s; }
+        .floating-cart-btn:active { transform: scale(0.95); }
+        .cart-badge { background: #000; color: var(--gold); border-radius: 50%; width: 24px; height: 24px; display: flex; justify-content: center; align-items: center; font-size: 0.85rem; font-weight: bold; }
+        
+        .footer-note { text-align: center; color: var(--text-gray); font-size: 0.85rem; margin-top: 25px; opacity: 0.7; }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="logo">DIAMOND MENU</div>
-    <p style="color: #555; font-size: 0.8rem;">Demo de Alta Fidelidad por Zenith Code</p>
-</header>
-
-<div class="categories" id="cat-container">
-    <button class="cat-btn active" onclick="filter('all', this)">🔥 Todo</button>
-    <button class="cat-btn" onclick="filter('tacos', this)">🌮 Tacos</button>
-    <button class="cat-btn" onclick="filter('burgers', this)">🍔 Burgers</button>
-    <button class="cat-btn" onclick="filter('bebidas', this)">🥤 Bebidas</button>
-</div>
-
-<main class="menu-grid" id="menu-box">
-    <div class="item-card tacos">
-        <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=400');"><span class="price-tag">$45</span></div>
-        <div class="info"><h3>Taco Pastor</h3><p class="item-desc">Marinado secreto de la casa.</p><button class="btn-order" onclick="send('Taco Pastor')">PEDIR</button></div>
-    </div>
-    <div class="item-card tacos">
-        <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1599974579688-8dbdd335c768?q=80&w=400');"><span class="price-tag">$55</span></div>
-        <div class="info"><h3>Taco de Sirloin</h3><p class="item-desc">Corte premium en tortilla de harina.</p><button class="btn-order" onclick="send('Taco Sirloin')">PEDIR</button></div>
-    </div>
-    <div class="item-card tacos">
-        <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1565299585323-38d6b0865b47?q=80&w=400');"><span class="price-tag">$140</span></div>
-        <div class="info"><h3>Gringa Especial</h3><p class="item-desc">Mucho queso y doble pastor.</p><button class="btn-order" onclick="send('Gringa Especial')">PEDIR</button></div>
+    <div class="header">
+        <h1>DIAMOND MENU</h1>
+        <p>Experiencia Digital Premium</p>
     </div>
 
-    <div class="item-card burgers">
-        <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=400');"><span class="price-tag">$185</span></div>
-        <div class="info"><h3>Diamond Burger</h3><p class="item-desc">Queso fundido y tocino extra.</p><button class="btn-order" onclick="send('Diamond Burger')">PEDIR</button></div>
-    </div>
-    <div class="item-card burgers">
-        <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=400');"><span class="price-tag">$210</span></div>
-        <div class="info"><h3>Burger de Pollo</h3><p class="item-desc">Pechuga crujiente y aderezo ranch.</p><button class="btn-order" onclick="send('Burger Pollo')">PEDIR</button></div>
+    <div class="categories" id="category-filters">
+        <button class="category-btn active" data-filter="todo">🌟 Todo</button>
+        <button class="category-btn" data-filter="tacos">🌮 Tacos</button>
+        <button class="category-btn" data-filter="burgers">🍔 Burgers</button>
+        <button class="category-btn" data-filter="bebidas">🍹 Bebidas & Más</button>
     </div>
 
-    <div class="item-card bebidas">
-        <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=400');"><span class="price-tag">$110</span></div>
-        <div class="info"><h3>Margarita Neón</h3><p class="item-desc">Tequila, limón y escarchado azul.</p><button class="btn-order" onclick="send('Margarita Neon')">PEDIR</button></div>
-    </div>
-</main>
+    <div class="menu-grid" id="menu-grid">
+        
+        <div class="menu-item" data-category="tacos">
+            <img src="https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=500&q=80" alt="Taco Pastor">
+            <div class="price-tag">$45</div>
+            <div class="item-info">
+                <h3>Taco Pastor</h3>
+                <p>Marinado secreto de la casa con piña asada.</p>
+                <button class="add-btn" onclick="addToCart('Taco Pastor', 45)">Agregar +</button>
+            </div>
+        </div>
 
-<script>
-    function filter(cat, btn) {
-        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        document.querySelectorAll('.item-card').forEach(card => {
-            if (cat === 'all' || card.classList.contains(cat)) card.classList.remove('hidden');
-            else card.classList.add('hidden');
+        <div class="menu-item" data-category="burgers">
+            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80" alt="Diamond Burger">
+            <div class="price-tag">$190</div>
+            <div class="item-info">
+                <h3>Diamond Burger</h3>
+                <p>Doble carne de res, queso fundido y tocino crujiente.</p>
+                <button class="add-btn" onclick="addToCart('Diamond Burger', 190)">Agregar +</button>
+            </div>
+        </div>
+
+        <div class="menu-item" data-category="tacos">
+            <img src="https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?w=500&q=80" alt="Sirloin Taco">
+            <div class="price-tag">$55</div>
+            <div class="item-info">
+                <h3>Taco Sirloin</h3>
+                <p>Corte premium en tortilla de harina con costra de queso.</p>
+                <button class="add-btn" onclick="addToCart('Taco Sirloin', 55)">Agregar +</button>
+            </div>
+        </div>
+
+        <div class="menu-item" data-category="burgers">
+            <img src="https://images.unsplash.com/photo-1512152272829-e3139592d56f?w=500&q=80" alt="Pollo Crispy">
+            <div class="price-tag">$165</div>
+            <div class="item-info">
+                <h3>Pollo Crispy</h3>
+                <p>Pechuga extracrujiente, queso suizo y aderezo ranch.</p>
+                <button class="add-btn" onclick="addToCart('Burger Pollo', 165)">Agregar +</button>
+            </div>
+        </div>
+
+        <div class="menu-item" data-category="tacos">
+            <img src="https://images.unsplash.com/photo-1628840042765-356cda07504e?w=500&q=80" alt="Gringa">
+            <div class="price-tag">$140</div>
+            <div class="item-info">
+                <h3>Gringa Especial</h3>
+                <p>Abundante queso y doble porción de carne al pastor.</p>
+                <button class="add-btn" onclick="addToCart('Gringa Especial', 140)">Agregar +</button>
+            </div>
+        </div>
+
+        <div class="menu-item" data-category="bebidas">
+            <img src="https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&q=80" alt="Michelada">
+            <div class="price-tag">$85</div>
+            <div class="item-info">
+                <h3>Michelada Clásica</h3>
+                <p>Cerveza fría con escarchado de chamoy y limón.</p>
+                <button class="add-btn" onclick="addToCart('Michelada', 85)">Agregar +</button>
+            </div>
+        </div>
+
+        <div class="menu-item" data-category="bebidas">
+            <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500&q=80" alt="Refresco">
+            <div class="price-tag">$35</div>
+            <div class="item-info">
+                <h3>Refresco 355ml</h3>
+                <p>Coca-Cola regular, light o sabores.</p>
+                <button class="add-btn" onclick="addToCart('Refresco', 35)">Agregar +</button>
+            </div>
+        </div>
+
+        <div class="menu-item" data-category="bebidas">
+            <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&q=80" alt="Pastel">
+            <div class="price-tag">$95</div>
+            <div class="item-info">
+                <h3>Volcán de Chocolate</h3>
+                <p>Bizcocho caliente relleno de chocolate derretido.</p>
+                <button class="add-btn" onclick="addToCart('Volcán Chocolate', 95)">Agregar +</button>
+            </div>
+        </div>
+
+    </div>
+
+    <button class="floating-cart-btn" onclick="toggleCart()">
+        🛒 Mi Pedido <span class="cart-badge" id="cart-count">0</span>
+    </button>
+
+    <div class="cart-overlay" id="cart-overlay">
+        <div class="cart-header">
+            <h2>🛒 Resumen de Pedido</h2>
+            <button class="close-cart" onclick="toggleCart()">✖</button>
+        </div>
+        
+        <div class="cart-items" id="cart-items">
+            </div>
+        
+        <div class="cart-totals">
+            <span>Total a Pagar</span>
+            <h3 id="cart-total">$0 MXN</h3>
+        </div>
+        
+        <button class="whatsapp-btn" onclick="sendWhatsAppOrder()">Enviar al Restaurante</button>
+        <p class="footer-note">Soporte técnico Zenith Code | WA: 479 152 7895</p>
+    </div>
+
+    <script>
+        // LÓGICA DE FILTRADO CON TRANSICIONES
+        const filterBtns = document.querySelectorAll('.category-btn');
+        const menuItems = document.querySelectorAll('.menu-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Quitar clase active de todos y ponerla en el clickeado
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filterValue = btn.getAttribute('data-filter');
+
+                menuItems.forEach(item => {
+                    const itemCategory = item.getAttribute('data-category');
+                    
+                    if (filterValue === 'todo' || filterValue === itemCategory) {
+                        item.classList.remove('remove'); // Asegurar que exista en el DOM
+                        // Un pequeño timeout para que el display:flex se aplique antes de la opacidad
+                        setTimeout(() => {
+                            item.classList.remove('hide');
+                        }, 50);
+                    } else {
+                        item.classList.add('hide'); // Inicia animación de ocultar
+                        // Espera a que termine la animación (0.4s) para quitarlo del flujo
+                        setTimeout(() => {
+                            if(item.classList.contains('hide')) {
+                                item.classList.add('remove');
+                            }
+                        }, 400); 
+                    }
+                });
+            });
         });
-    }
-    function send(item) { window.open(`https://wa.me/524791527895?text=Hola! Quiero pedir el: ${item}`, '_blank'); }
-</script>
+
+        // LÓGICA DEL CARRITO (CANASTA)
+        let cart = [];
+
+        function addToCart(name, price) {
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.qty += 1;
+            } else {
+                cart.push({ name: name, price: price, qty: 1 });
+            }
+            updateCartUI();
+        }
+
+        function changeQty(name, delta) {
+            const item = cart.find(item => item.name === name);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) {
+                    cart = cart.filter(i => i.name !== name); 
+                }
+                updateCartUI();
+            }
+        }
+
+        function updateCartUI() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartTotalEl = document.getElementById('cart-total');
+            const cartCountEl = document.getElementById('cart-count');
+            
+            cartItemsContainer.innerHTML = ''; 
+            let total = 0;
+            let totalItems = 0;
+
+            cart.forEach(item => {
+                const subtotal = item.price * item.qty;
+                total += subtotal;
+                totalItems += item.qty;
+
+                const itemHTML = `
+                    <div class="cart-item">
+                        <div class="item-details">
+                            <h4>${item.name}</h4>
+                            <span>$${item.price} x ${item.qty}</span>
+                        </div>
+                        <div class="item-controls">
+                            <button class="ctrl-btn" onclick="changeQty('${item.name}', -1)">-</button>
+                            <span>${item.qty}</span>
+                            <button class="ctrl-btn" onclick="changeQty('${item.name}', 1)">+</button>
+                        </div>
+                        <div style="color: var(--gold); font-weight: bold;">$${subtotal}</div>
+                    </div>
+                `;
+                cartItemsContainer.insertAdjacentHTML('beforeend', itemHTML);
+            });
+
+            cartTotalEl.innerText = `$${total} MXN`;
+            cartCountEl.innerText = totalItems;
+        }
+
+        function toggleCart() {
+            document.getElementById('cart-overlay').classList.toggle('open');
+        }
+
+        function sendWhatsAppOrder() {
+            if (cart.length === 0) {
+                alert("¡Agrega algo delicioso a tu pedido primero!");
+                return;
+            }
+
+            // TU NÚMERO DE TELÉFONO AQUÍ
+            const phoneNumber = "524791527895"; 
+            let message = "🌟 *NUEVO PEDIDO DIGITAL* 🌟\n\nHola, quiero ordenar lo siguiente:\n\n";
+            let total = 0;
+
+            cart.forEach(item => {
+                const subtotal = item.price * item.qty;
+                message += `▪️ ${item.qty}x ${item.name} - $${subtotal}\n`;
+                total += subtotal;
+            });
+
+            message += `\n*TOTAL A PAGAR: $${total} MXN*\n\n_Generado por Zenith Code_`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+            window.open(whatsappURL, '_blank');
+        }
+    </script>
 </body>
 </html>
